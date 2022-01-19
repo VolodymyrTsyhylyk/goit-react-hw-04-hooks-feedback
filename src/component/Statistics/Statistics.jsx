@@ -1,43 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Notification from "./Notification";
+import { StatisticsList, StatisticsListItem} from "./Statistics.styles";
 
-import css from "./Statistics.module.css";
-
-const Statistics = ({ good, neutral, bad, total, positivePercentage }) => {
-  // eslint-disable-next-line
-  const totalSum = total();
-  // eslint-disable-next-line
-  const positivePercentageSum = positivePercentage();
-
-  return (
-    <div>
-      {totalSum ? (
-        <>
-          <h2 className={css.title}> Statistics</h2>
-          <p className={css.title}> Good: {good}</p>
-          <p className={css.title}> Neutral: {neutral}</p>
-          <p className={css.title}> Bad: {bad}</p>
-          <p className={css.title}> Total: {totalSum}</p>
-          <p className={css.title}>
-            Positive feedback: {positivePercentageSum} %
-          </p>
-        </>
-      ) : (
-        <div className={css.title}>
-          <Notification message="There is no feedback" />
-        </div>
-      )}
-    </div>
-  );
-};
+function Statistics({options, values, total, positive}) {
+    return (
+        <StatisticsList>
+            {options.map((option) => (
+                <StatisticsListItem key={option}>
+                    {option}: {values[option]}</StatisticsListItem>
+            ))}
+            <StatisticsListItem key={"total"}>{"Total"}: {total}</StatisticsListItem>
+            <StatisticsListItem key={"positive"}>{"Positive feedback"}: {positive}%</StatisticsListItem>
+        </StatisticsList>
+    );
+}
 
 Statistics.propTypes = {
-  good: PropTypes.number.isRequired,
-  neutral: PropTypes.number.isRequired,
-  bad: PropTypes.number.isRequired,
-  total: PropTypes.func.isRequired,
-  positivePercentage: PropTypes.func.isRequired,
+    options: PropTypes.arrayOf(PropTypes.string),
+    values: PropTypes.object,
+    total: PropTypes.number,
+    positive: PropTypes.number,
 };
 
 export default Statistics;
